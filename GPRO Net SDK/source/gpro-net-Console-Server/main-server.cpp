@@ -23,7 +23,7 @@
 */
 
 #include "gpro-net/gpro-net.h"
-
+#include "gpro-net/Message.h"
 
 #include <stdio.h>
 #include <stdlib.h>

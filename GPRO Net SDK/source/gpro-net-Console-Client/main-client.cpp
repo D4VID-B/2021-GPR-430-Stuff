@@ -23,7 +23,7 @@
 */
 
 #include "gpro-net/gpro-net.h"
-
+#include "gpro-net/Message.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -99,6 +99,10 @@ int main(int const argc, char const* const argv[])
 				RakNet::RakString rs;
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				//bsIn.Read()
+				//bsIn.Read()
+				//bsIn.Read()
+
 				bsIn.Read(rs);
 				printf("%s\n", rs.C_String());
 			}
