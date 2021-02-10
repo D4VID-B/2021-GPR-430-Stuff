@@ -60,7 +60,7 @@ int main(int const argc, char const* const argv[])
 	{
 		for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
 		{
-			switch (packet->data[5])
+			switch (packet->data[0])
 			{
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 				printf("Another client has disconnected.\n");
@@ -91,18 +91,14 @@ int main(int const argc, char const* const argv[])
 
 				//	**********	Sending User Data **********	//
 
-
+				RakNet::BitStream bsOut;
+				bsOut.Write((RakNet::MessageID)ID_USER_INFO);
+				bsOut.Write(userName);
+				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 
 				//	**********	Sending User Data **********	//
 
-				/*RakNet::BitStream bsOut;
-				RakNet::Time timeStamp = RakNet::GetTime();
-		
-				bsOut.Write((RakNet::MessageID)ID_TIMESTAMP);
-				bsOut.Write(timeStamp);
-				bsOut.Write((RakNet::MessageID)ID_GAME_MESSAGE_1);
-				bsOut.Write("Hello world");
-				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);*/
+				
 			}
 			break;
 			case ID_NEW_INCOMING_CONNECTION:
@@ -117,21 +113,25 @@ int main(int const argc, char const* const argv[])
 			case ID_CONNECTION_LOST:
 					printf("Connection lost.\n");
 				break;
+			case ID_SEND_CHAT_MESSAGE:
 
-			case ID_GAME_MESSAGE_1:
+
+
+				break;
+			case ID_GET_CHAT_MESSAGE:
 			{
-				RakNet::RakString rs;
-				RakNet::BitStream bsIn(packet->data, packet->length, false);
-				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-
+				//RakNet::RakString rs;
+				//RakNet::BitStream bsIn(packet->data, packet->length, false);
 				//bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
-				//bsIn.Read()
-				//bsIn.Read()
-				//bsIn.Read()
+				////bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
-				bsIn.Read(rs);
-				printf("%s\n", rs.C_String());
+				////bsIn.Read()
+				////bsIn.Read()
+				////bsIn.Read()
+
+				//bsIn.Read(rs);
+				//printf("%s\n", rs.C_String());
 			}
 			break;
 
