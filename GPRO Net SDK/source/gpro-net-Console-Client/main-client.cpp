@@ -36,10 +36,7 @@
 #include "RakNet/GetTime.h"
 
 
-enum GameMessages
-{
-	ID_GAME_MESSAGE_1 = ID_USER_PACKET_ENUM + 1
-};
+
 
 int main(int const argc, char const* const argv[])
 {
