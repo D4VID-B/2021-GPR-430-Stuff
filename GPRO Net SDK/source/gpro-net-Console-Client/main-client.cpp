@@ -34,8 +34,6 @@
 #include "RakNet/RakPeerInterface.h"
 
 
-
-
 int main(int const argc, char const* const argv[])
 {
 	const char SERVER_IP[] = "172.16.2.194";
