@@ -5,8 +5,8 @@
 
 struct Message
 {
-	//RakString? sender;
-	//RakString? reciver;
+	RakNet::RakString sender;
+	RakNet::RakString reciver;
 	bool isPrivate;
-	//RakString? message;
+	RakNet::RakString message;
 };
