@@ -28,14 +28,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
 #include "RakNet/BitStream.h"
 #include "RakNet/RakNetTypes.h"
 #include "RakNet/MessageIdentifiers.h"
 #include "RakNet/RakPeerInterface.h"
+#include "RakNet/GetTime.h"
 
 
 int main(int const argc, char const* const argv[])
 {
+
+	//	**********	Initial Setup **********	//
 	const char SERVER_IP[] = "172.16.2.194";
 	const unsigned short SERVER_PORT = 7777;
 
@@ -48,7 +52,8 @@ int main(int const argc, char const* const argv[])
 	peer->Connect(SERVER_IP, SERVER_PORT, 0, 0);
 	printf("Starting the client.\n");
 
-
+	//	**********	Initial Setup **********	//
+	
 	while (1)
 	{
 		for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
@@ -68,12 +73,30 @@ int main(int const argc, char const* const argv[])
 			{
 				printf("Our connection request has been accepted.\n");
 
-				// Use a BitStream to write a custom user message
-				// Bitstreams are easier to use than sending casted structures, and handle endian swapping automatically
+				//	**********	User Input Section **********	//
+				//Just get the username and store it in a string
+				printf("\n Input User Name");
+				printf("\n No spaces!");
+				printf("\n User Name ==> ");
+				std::string temp;
+				std::cin >> temp;
+
+				RakNet::RakString userName = RakNet::RakString(temp.c_str());
+				
+				//	**********	User Input Section **********	//
+
+
+
+				//	**********	Sending User Data **********	//
+
 				RakNet::BitStream bsOut;
-				bsOut.Write((RakNet::MessageID)ID_GAME_MESSAGE_1);
-				bsOut.Write("Hello world");
+				bsOut.Write((RakNet::MessageID)ID_USER_INFO);
+				bsOut.Write(userName);
 				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
+
+				//	**********	Sending User Data **********	//
+
+				
 			}
 			break;
 			case ID_NEW_INCOMING_CONNECTION:
@@ -88,18 +111,25 @@ int main(int const argc, char const* const argv[])
 			case ID_CONNECTION_LOST:
 					printf("Connection lost.\n");
 				break;
+			case ID_SEND_CHAT_MESSAGE:
 
-			case ID_GAME_MESSAGE_1:
+
+
+				break;
+			case ID_GET_CHAT_MESSAGE:
 			{
-				RakNet::RakString rs;
-				RakNet::BitStream bsIn(packet->data, packet->length, false);
-				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-				//bsIn.Read()
-				//bsIn.Read()
-				//bsIn.Read()
+				//RakNet::RakString rs;
+				//RakNet::BitStream bsIn(packet->data, packet->length, false);
+				//bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 
-				bsIn.Read(rs);
-				printf("%s\n", rs.C_String());
+				////bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+
+				////bsIn.Read()
+				////bsIn.Read()
+				////bsIn.Read()
+
+				//bsIn.Read(rs);
+				//printf("%s\n", rs.C_String());
 			}
 			break;
 
@@ -117,3 +147,4 @@ int main(int const argc, char const* const argv[])
 
 	system("pause");
 }
+
