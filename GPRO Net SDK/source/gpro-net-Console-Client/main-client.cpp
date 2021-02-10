@@ -42,7 +42,7 @@ int main(int const argc, char const* const argv[])
 {
 
 	//	**********	Initial Setup **********	//
-	const char SERVER_IP[] = "172.16.2.194";
+	const char SERVER_IP[] = "172.16.2.62";
 	const unsigned short SERVER_PORT = 7777;
 
 	RakNet::RakPeerInterface* peer = RakNet::RakPeerInterface::GetInstance();
@@ -60,7 +60,7 @@ int main(int const argc, char const* const argv[])
 	{
 		for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
 		{
-			switch (packet->data[5])
+			switch (packet->data[0])
 			{
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 				printf("Another client has disconnected.\n");
@@ -93,8 +93,8 @@ int main(int const argc, char const* const argv[])
 
 				RakNet::BitStream bsOut;
 				RakNet::Time stamp = RakNet::GetTime();
-				bsOut.Write((RakNet::MessageID)ID_TIMESTAMP);
-				bsOut.Write(stamp);
+				//bsOut.Write((RakNet::MessageID)ID_TIMESTAMP);
+				//bsOut.Write(stamp);
 				bsOut.Write((RakNet::MessageID)ID_USER_INFO);
 				bsOut.Write(userName);
 				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);

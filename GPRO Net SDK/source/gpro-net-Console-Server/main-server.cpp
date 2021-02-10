@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
+#include <map>
 #include "RakNet/BitStream.h"
 #include "RakNet/RakNetTypes.h"
 #include "RakNet/MessageIdentifiers.h"
@@ -47,6 +49,8 @@ int main(int const argc, char const* const argv[])
 	peer->SetMaximumIncomingConnections(MAX_CLIENTS);
 	printf("Starting the server.\n");
 
+	std::map<std::string, std::string> users;
+
 	while (1)
 	{
 		for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
@@ -64,14 +68,8 @@ int main(int const argc, char const* const argv[])
 				break;
 			case ID_CONNECTION_REQUEST_ACCEPTED:
 			{
-				printf("Our connection request has been accepted.\n");
+				printf("Welcome to the server\n");
 
-				// Use a BitStream to write a custom user message
-				// Bitstreams are easier to use than sending casted structures, and handle endian swapping automatically
-				RakNet::BitStream bsOut;
-				bsOut.Write((RakNet::MessageID)ID_GAME_MESSAGE_1);
-				bsOut.Write("Hello world");
-				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 			}
 			break;
 			case ID_NEW_INCOMING_CONNECTION:
@@ -87,16 +85,40 @@ int main(int const argc, char const* const argv[])
 					printf("A client lost the connection.\n");
 				break;
 
-			case ID_GAME_MESSAGE_1:
+			case ID_SEND_CHAT_MESSAGE:
 			{
-				RakNet::RakString rs;
+				/*RakNet::RakString rs;
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(rs);
-				printf("%s\n", rs.C_String());
+				printf("%s\n", rs.C_String());*/
 			}
 			break;
+			case ID_GET_CHAT_MESSAGE:
+			{
+				/*RakNet::RakString rs;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(rs);
+				printf("%s\n", rs.C_String());*/
+			}
+			break;
+			case ID_USER_INFO:
+			{
+				RakNet::RakString userName;
+				RakNet::Time stamp;
 
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(stamp);
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(userName);
+				
+				users.insert({ packet->systemAddress.ToString(), userName.C_String() });
+
+				std::cout << "Welcome " + users.at(packet->systemAddress.ToString()) + " !";
+			}
+				break;
 			default:
 				printf("Message with identifier %i has arrived.\n", packet->data[0]);
 				break;
