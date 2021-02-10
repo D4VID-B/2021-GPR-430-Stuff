@@ -60,7 +60,7 @@ int main(int const argc, char const* const argv[])
 	{
 		for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
 		{
-			switch (packet->data[0])
+			switch (packet->data[5])
 			{
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 				printf("Another client has disconnected.\n");
@@ -92,6 +92,9 @@ int main(int const argc, char const* const argv[])
 				//	**********	Sending User Data **********	//
 
 				RakNet::BitStream bsOut;
+				RakNet::Time stamp = RakNet::GetTime();
+				bsOut.Write((RakNet::MessageID)ID_TIMESTAMP);
+				bsOut.Write(stamp);
 				bsOut.Write((RakNet::MessageID)ID_USER_INFO);
 				bsOut.Write(userName);
 				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
@@ -114,10 +117,10 @@ int main(int const argc, char const* const argv[])
 					printf("Connection lost.\n");
 				break;
 			case ID_SEND_CHAT_MESSAGE:
+			{
 
-
-
-				break;
+			}
+			break;
 			case ID_GET_CHAT_MESSAGE:
 			{
 				//RakNet::RakString rs;
