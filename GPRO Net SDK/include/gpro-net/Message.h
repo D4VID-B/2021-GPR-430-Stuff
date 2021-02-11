@@ -23,23 +23,23 @@ struct ChatMessage
 	RakNet::Time timeStamp; // Put the system time in here returned by RakNet::GetTime() or some other method that returns a similar value
 	unsigned char typeId; // Your type here
 
-	RakNet::RakString sender;
-	RakNet::RakString reciever; // If blank, send to everyone
+	char sender[101];
+	char reciever[101]; // If blank, send to everyone
 	bool isPrivate;
-	RakNet::RakString chatMessage;
+	char chatMessage[101];
 
-	ChatMessage(RakNet::RakString &sender, RakNet::RakString &reciever, bool isPrivate, RakNet::RakString &chatMessage)
+	ChatMessage(const char sender[], const char reciever[], bool isPrivate, const char chatMessage[])
 	{
-		this->sender = sender;
-		this->reciever = reciever;
+		std::strcpy(this->sender, sender);
+		std::strcpy(this->reciever, reciever);
 		this->isPrivate = isPrivate;
-		this->chatMessage = chatMessage;
+		std::strcpy(this->chatMessage, chatMessage);
 		this->timeStamp = RakNet::GetTime();
 		this->useTimeStamp = ID_TIMESTAMP;
 		this->typeId = ID_SEND_CHAT_MESSAGE;
 	}
 
-	ChatMessage(std::string sender, std::string reciever, bool isPrivate, std::string chatMessage)
+	/*ChatMessage(std::string sender, std::string reciever, bool isPrivate, std::string chatMessage)
 	{
 		this->sender = RakNet::RakString(sender.c_str());
 		this->reciever = RakNet::RakString(reciever.c_str());
@@ -48,7 +48,7 @@ struct ChatMessage
 		this->timeStamp = RakNet::GetTime();
 		this->useTimeStamp = ID_TIMESTAMP;
 		this->typeId = ID_SEND_CHAT_MESSAGE;
-	}
+	}*/
 
 	ChatMessage()
 	{
