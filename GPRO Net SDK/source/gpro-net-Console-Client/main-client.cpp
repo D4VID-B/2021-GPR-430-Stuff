@@ -40,7 +40,7 @@
 int main(int const argc, char const* const argv[])
 {
 	//	**********	Initial Setup **********	//
-	const char SERVER_IP[] = "172.16.2.186";
+	const char SERVER_IP[] = "172.16.2.60";
 	const unsigned short SERVER_PORT = 7777;
 
 	RakNet::RakPeerInterface* peer = RakNet::RakPeerInterface::GetInstance();

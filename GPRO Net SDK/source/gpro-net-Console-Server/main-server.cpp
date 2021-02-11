@@ -52,9 +52,9 @@ int main(int const argc, char const* const argv[])
 
 	std::map<std::string, std::string> users;
 
-
+	//const char* path = "/Desktop/Chat_Log.txt";
 	std::ofstream log;
-	log.open("Chat_Log.txt");
+	//log.open("Chat_Log.txt");
 
 	log << "Server Online ...\n";
 
