@@ -1,3 +1,8 @@
+/*
+	Created by David Bakaleinik
+	Edits by David Bakaleinik and Dyson Little
+*/
+
 #pragma once
 
 #include "RakNet/BitStream.h"
