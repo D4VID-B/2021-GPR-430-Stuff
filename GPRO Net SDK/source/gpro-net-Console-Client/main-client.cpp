@@ -40,7 +40,7 @@ int main(int const argc, char const* const argv[])
 {
 
 	//	**********	Initial Setup **********	//
-	const char SERVER_IP[] = "172.16.2.194";
+	const char SERVER_IP[] = "172.16.2.62";
 	const unsigned short SERVER_PORT = 7777;
 
 	RakNet::RakPeerInterface* peer = RakNet::RakPeerInterface::GetInstance();
@@ -90,6 +90,9 @@ int main(int const argc, char const* const argv[])
 				//	**********	Sending User Data **********	//
 
 				RakNet::BitStream bsOut;
+				RakNet::Time stamp = RakNet::GetTime();
+				//bsOut.Write((RakNet::MessageID)ID_TIMESTAMP);
+				//bsOut.Write(stamp);
 				bsOut.Write((RakNet::MessageID)ID_USER_INFO);
 				bsOut.Write(userName);
 				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
@@ -112,10 +115,10 @@ int main(int const argc, char const* const argv[])
 					printf("Connection lost.\n");
 				break;
 			case ID_SEND_CHAT_MESSAGE:
+			{
 
-
-
-				break;
+			}
+			break;
 			case ID_GET_CHAT_MESSAGE:
 			{
 				//RakNet::RakString rs;

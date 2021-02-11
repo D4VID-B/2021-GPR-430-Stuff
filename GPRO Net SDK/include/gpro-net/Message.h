@@ -35,7 +35,7 @@ struct ChatMessage
 		this->chatMessage = chatMessage;
 		this->timeStamp = RakNet::GetTime();
 		this->useTimeStamp = ID_TIMESTAMP;
-		this->typeId = ID_CHAT_MESSAGE;
+		this->typeId = ID_SEND_CHAT_MESSAGE;
 	}
 
 	ChatMessage(std::string sender, std::string reciever, bool isPrivate, std::string chatMessage)
@@ -46,7 +46,7 @@ struct ChatMessage
 		this->chatMessage = RakNet::RakString(chatMessage.c_str());
 		this->timeStamp = RakNet::GetTime();
 		this->useTimeStamp = ID_TIMESTAMP;
-		this->typeId = ID_CHAT_MESSAGE;
+		this->typeId = ID_SEND_CHAT_MESSAGE;
 	}
 };
 #pragma pack(pop)

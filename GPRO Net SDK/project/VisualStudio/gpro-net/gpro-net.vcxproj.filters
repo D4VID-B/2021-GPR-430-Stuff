@@ -18,7 +18,7 @@
     <ClInclude Include="..\..\..\include\gpro-net\gpro-net.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\source\gpro-net\Message.h">
+    <ClInclude Include="..\..\..\include\gpro-net\Message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
