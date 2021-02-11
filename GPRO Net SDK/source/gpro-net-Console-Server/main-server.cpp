@@ -22,6 +22,11 @@
 	Main source for console server application.
 */
 
+/*
+	Edits by David Bakaleinik and Dyson Little
+	Base code from RakNet website
+*/
+
 #include "gpro-net/gpro-net.h"
 #include "gpro-net/Message.h"
 
