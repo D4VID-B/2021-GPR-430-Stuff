@@ -36,9 +36,9 @@
 #include "RakNet/GetTime.h"
 
 
+
 int main(int const argc, char const* const argv[])
 {
-
 	//	**********	Initial Setup **********	//
 	const char SERVER_IP[] = "172.16.2.62";
 	const unsigned short SERVER_PORT = 7777;
@@ -53,6 +53,9 @@ int main(int const argc, char const* const argv[])
 	printf("Starting the client.\n");
 
 	//	**********	Initial Setup **********	//
+
+	RakNet::RakString userName = "";
+	bool connected = false;
 	
 	while (1)
 	{
@@ -60,6 +63,11 @@ int main(int const argc, char const* const argv[])
 		{
 			switch (packet->data[0])
 			{
+			case ID_TIMESTAMP:
+			{
+
+			}
+			break;
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 				printf("Another client has disconnected.\n");
 				break;
@@ -81,7 +89,7 @@ int main(int const argc, char const* const argv[])
 				std::string temp;
 				std::cin >> temp;
 
-				RakNet::RakString userName = RakNet::RakString(temp.c_str());
+				userName = RakNet::RakString(temp.c_str());
 				
 				//	**********	User Input Section **********	//
 
@@ -99,7 +107,8 @@ int main(int const argc, char const* const argv[])
 
 				//	**********	Sending User Data **********	//
 
-				
+
+				connected = true;
 			}
 			break;
 			case ID_NEW_INCOMING_CONNECTION:
@@ -110,12 +119,18 @@ int main(int const argc, char const* const argv[])
 				break;
 			case ID_DISCONNECTION_NOTIFICATION:
 					printf("We have been disconnected.\n");
+					connected = false;
 				break;
 			case ID_CONNECTION_LOST:
 					printf("Connection lost.\n");
 				break;
 			case ID_SEND_CHAT_MESSAGE:
 			{
+				RakNet::BitStream bsIn;
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				ChatMessage inChatMessage;
+				bsIn.Read(inChatMessage);
+				std::cout << inChatMessage.chatMessage;
 
 			}
 			break;
@@ -133,6 +148,7 @@ int main(int const argc, char const* const argv[])
 
 				//bsIn.Read(rs);
 				//printf("%s\n", rs.C_String());
+				
 			}
 			break;
 
@@ -140,6 +156,21 @@ int main(int const argc, char const* const argv[])
 				printf("Message with identifier %i has arrived.\n", packet->data[0]);
 				break;
 			}
+		}
+		if (connected)
+		{
+			// Scan and send outbound messages
+
+			printf("> ");
+			char input[101];
+			scanf("%100s", &input);
+			RakNet::RakString blank = RakNet::RakString("");
+			RakNet::RakString rsInput = RakNet::RakString(input);
+			ChatMessage outboundMessage = ChatMessage(userName, blank, false, rsInput);
+			RakNet::BitStream bsOut;
+			bsOut.Write((RakNet::MessageID)ID_SEND_CHAT_MESSAGE);
+			bsOut.Write(outboundMessage);
+			peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 		}
 	}
 
@@ -150,4 +181,6 @@ int main(int const argc, char const* const argv[])
 
 	system("pause");
 }
+
+
 

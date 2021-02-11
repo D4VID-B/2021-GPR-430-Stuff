@@ -57,6 +57,11 @@ int main(int const argc, char const* const argv[])
 		{
 			switch (packet->data[0])
 			{
+			case ID_TIMESTAMP:
+			{
+				printf("Received packet with timestamp!");
+			}
+			break;
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 				printf("Another client has disconnected.\n");
 				break;
@@ -87,6 +92,21 @@ int main(int const argc, char const* const argv[])
 
 			case ID_SEND_CHAT_MESSAGE:
 			{
+				/*printf("Chat message received");
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				ChatMessage inChatMessage;
+				bsIn.Read(inChatMessage);
+				std::cout << inChatMessage.chatMessage;*/
+
+				printf("Chat message received");
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				ChatMessage inChatMessage;
+				bsIn.Read(inChatMessage);
+				std::cout << inChatMessage.chatMessage;
+
+
 				/*RakNet::RakString rs;
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -106,11 +126,11 @@ int main(int const argc, char const* const argv[])
 			case ID_USER_INFO:
 			{
 				RakNet::RakString userName;
-				RakNet::Time stamp;
+				//RakNet::Time stamp;
 
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
-				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-				bsIn.Read(stamp);
+				//bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				//bsIn.Read(stamp);
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(userName);
 				

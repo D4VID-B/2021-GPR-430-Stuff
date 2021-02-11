@@ -5,6 +5,7 @@
 #include "RakNet/RakNetTypes.h"
 #include "RakNet/MessageIdentifiers.h"
 #include "RakNet/GetTime.h"
+#include "RakNet/BitStream.h"
 #include <stdlib.h>
 #include <string>
 
@@ -27,7 +28,7 @@ struct ChatMessage
 	bool isPrivate;
 	RakNet::RakString chatMessage;
 
-	ChatMessage(RakNet::RakString sender, RakNet::RakString reciever, bool isPrivate, RakNet::RakString chatMessage)
+	ChatMessage(RakNet::RakString &sender, RakNet::RakString &reciever, bool isPrivate, RakNet::RakString &chatMessage)
 	{
 		this->sender = sender;
 		this->reciever = reciever;
@@ -47,6 +48,11 @@ struct ChatMessage
 		this->timeStamp = RakNet::GetTime();
 		this->useTimeStamp = ID_TIMESTAMP;
 		this->typeId = ID_SEND_CHAT_MESSAGE;
+	}
+
+	ChatMessage()
+	{
+
 	}
 };
 #pragma pack(pop)
