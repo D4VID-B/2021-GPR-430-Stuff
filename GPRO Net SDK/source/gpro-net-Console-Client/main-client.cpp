@@ -40,7 +40,7 @@
 int main(int const argc, char const* const argv[])
 {
 	//	**********	Initial Setup **********	//
-	const char SERVER_IP[] = "172.16.2.62";
+	const char SERVER_IP[] = "172.16.2.60";
 	const unsigned short SERVER_PORT = 7777;
 
 	RakNet::RakPeerInterface* peer = RakNet::RakPeerInterface::GetInstance();
@@ -160,13 +160,29 @@ int main(int const argc, char const* const argv[])
 		if (connected)
 		{
 			// Scan and send outbound messages
+			printf("> Give recipient? (input _ if you don't want to): ");
+			char rec[101];
+			scanf("%100s", &rec);
+
+			printf("> Private? 0 for no, 1 for yes: ");
+			unsigned int isPr = 0;
+			bool isPrivate;
+			scanf("%u", &isPr);
+			if (isPr = 1)
+			{
+				isPrivate = true;
+			}
+			else
+			{
+				isPrivate = false;
+			}
 
 			printf("> ");
 			char input[101];
 			scanf("%100s", &input);
-			RakNet::RakString blank = RakNet::RakString("");
+			RakNet::RakString recipient = RakNet::RakString(rec);
 			RakNet::RakString rsInput = RakNet::RakString(input);
-			ChatMessage outboundMessage = ChatMessage(userName, blank, false, rsInput);
+			ChatMessage outboundMessage = ChatMessage(userName.C_String(), recipient.C_String(), isPr, rsInput.C_String());
 			RakNet::BitStream bsOut;
 			bsOut.Write((RakNet::MessageID)ID_SEND_CHAT_MESSAGE);
 			bsOut.Write(outboundMessage);

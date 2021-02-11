@@ -92,20 +92,67 @@ int main(int const argc, char const* const argv[])
 
 			case ID_SEND_CHAT_MESSAGE:
 			{
+				/* Handling incoming messages:
+				When a message arrives, check if there are any recipients - if not, print the message ignoring the isPrivate setting
+				If there is 1 or more, and it's not private, print the names of recipients first, then the message
+				If there is 1 or more and it is private, send it directly to the recipient
+
+				*/
+
+				printf("\nNew Message Incoming... \n");
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				ChatMessage inChatMessage;
+				bsIn.Read(inChatMessage);
+				
+
+				bool isPublicMessage = false;
+				if (inChatMessage.isPrivate)
+				{
+					if (inChatMessage.reciever == "_")
+					{
+						isPublicMessage = true;
+					}
+					else
+					{
+						isPublicMessage = false; //This is the first special case, where the message is private and has specified recipients
+
+						std::cout << users.at(packet->systemAddress.ToString()) + " whispers something to " + inChatMessage.reciever.C_String() + ": \n";
+						
+
+					}
+				}
+				else
+				{
+					if (inChatMessage.reciever == "_")
+					{
+						isPublicMessage = true;
+
+					}
+					else
+					{
+						isPublicMessage = false; //This is the second special case as the message is public, but it is still adressed to specific users
+
+						std::cout << users.at(packet->systemAddress.ToString()) + " says to " + inChatMessage.reciever.C_String() + ": \n";
+						std::cout << inChatMessage.chatMessage;
+						std::cout << "\n";
+					}
+				}
+				
+				
+				if (isPublicMessage)
+				{
+					std::cout << users.at(packet->systemAddress.ToString()) + " says: \n";
+					std::cout << inChatMessage.chatMessage;
+					std::cout << "\n";
+				}
+
 				/*printf("Chat message received");
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				ChatMessage inChatMessage;
 				bsIn.Read(inChatMessage);
 				std::cout << inChatMessage.chatMessage;*/
-
-				printf("Chat message received");
-				RakNet::BitStream bsIn(packet->data, packet->length, false);
-				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-				ChatMessage inChatMessage;
-				bsIn.Read(inChatMessage);
-				std::cout << inChatMessage.chatMessage;
-
 
 				/*RakNet::RakString rs;
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
