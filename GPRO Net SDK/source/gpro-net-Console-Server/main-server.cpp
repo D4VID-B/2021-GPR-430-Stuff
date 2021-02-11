@@ -30,6 +30,7 @@
 #include <string.h>
 #include <iostream>
 #include <map>
+#include <fstream>
 #include "RakNet/BitStream.h"
 #include "RakNet/RakNetTypes.h"
 #include "RakNet/MessageIdentifiers.h"
@@ -50,6 +51,12 @@ int main(int const argc, char const* const argv[])
 	printf("Starting the server.\n");
 
 	std::map<std::string, std::string> users;
+
+
+	std::ofstream log;
+	log.open("Chat_Log.txt");
+
+	log << "Server Online ...\n";
 
 	while (1)
 	{
@@ -106,10 +113,10 @@ int main(int const argc, char const* const argv[])
 				bsIn.Read(inChatMessage);
 				
 
-				bool isPublicMessage = false;
+				bool isPublicMessage = true;
 				if (inChatMessage.isPrivate)
 				{
-					if (inChatMessage.reciever == "_")
+					if (inChatMessage.reciever != "_")
 					{
 						isPublicMessage = true;
 					}
@@ -117,9 +124,20 @@ int main(int const argc, char const* const argv[])
 					{
 						isPublicMessage = false; //This is the first special case, where the message is private and has specified recipients
 
-						std::cout << users.at(packet->systemAddress.ToString()) + " whispers something to " + inChatMessage.reciever.C_String() + ": \n";
+						std::string messageTitle = users.at(packet->systemAddress.ToString()) + " whispers something to " + inChatMessage.reciever + ": \n";
+						std::cout << messageTitle;
 						
+						RakNet::BitStream bsOut;
+						bsOut.Write((RakNet::MessageID)ID_SEND_CHAT_MESSAGE);
+						bsOut.Write(messageTitle);
+						bsOut.Write(inChatMessage.chatMessage);
+						peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 
+
+						log << "\n";
+						log << messageTitle;
+						log << inChatMessage.chatMessage;
+						log << "\n";
 					}
 				}
 				else
@@ -133,32 +151,51 @@ int main(int const argc, char const* const argv[])
 					{
 						isPublicMessage = false; //This is the second special case as the message is public, but it is still adressed to specific users
 
-						std::cout << users.at(packet->systemAddress.ToString()) + " says to " + inChatMessage.reciever.C_String() + ": \n";
+						std::string messageTitle = users.at(packet->systemAddress.ToString()) + " says to " + inChatMessage.reciever + ": \n";
+
+						std::cout << messageTitle;
 						std::cout << inChatMessage.chatMessage;
 						std::cout << "\n";
+
+						RakNet::BitStream bsOut;
+						bsOut.Write((RakNet::MessageID)ID_SEND_CHAT_MESSAGE);
+						bsOut.Write(messageTitle);
+						bsOut.Write(inChatMessage.chatMessage);
+						peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
+						log << "\n";
+						log << messageTitle;
+						log << inChatMessage.chatMessage;
+						log << "\n";
 					}
 				}
 				
 				
-				if (isPublicMessage)
+				if (isPublicMessage) //If this is a public message, send it to everyone
 				{
-					std::cout << users.at(packet->systemAddress.ToString()) + " says: \n";
+
+					std::string messageTitle = users.at(packet->systemAddress.ToString()) + " says: \n";
+					std::cout << messageTitle;
 					std::cout << inChatMessage.chatMessage;
 					std::cout << "\n";
+
+					RakNet::BitStream bsOut;
+					//RakNet::Time stamp = RakNet::GetTime();
+					//bsOut.Write((RakNet::MessageID)ID_TIMESTAMP);
+					//bsOut.Write(stamp);
+					bsOut.Write((RakNet::MessageID)ID_SEND_CHAT_MESSAGE);
+					bsOut.Write(messageTitle);
+					bsOut.Write(inChatMessage.chatMessage);
+					peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
+					//Now we log the message for safekeeping
+
+					log << "\n";
+					log << messageTitle;
+					log << inChatMessage.chatMessage;
+					log << "\n";
 				}
-
-				/*printf("Chat message received");
-				RakNet::BitStream bsIn(packet->data, packet->length, false);
-				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-				ChatMessage inChatMessage;
-				bsIn.Read(inChatMessage);
-				std::cout << inChatMessage.chatMessage;*/
-
-				/*RakNet::RakString rs;
-				RakNet::BitStream bsIn(packet->data, packet->length, false);
-				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-				bsIn.Read(rs);
-				printf("%s\n", rs.C_String());*/
+				
 			}
 			break;
 			case ID_GET_CHAT_MESSAGE:
@@ -184,6 +221,9 @@ int main(int const argc, char const* const argv[])
 				users.insert({ packet->systemAddress.ToString(), userName.C_String() });
 
 				std::cout << "Welcome " + users.at(packet->systemAddress.ToString()) + " !";
+
+				log << "\nWelcome " + users.at(packet->systemAddress.ToString()) + " !\n";
+
 			}
 				break;
 			default:
@@ -195,6 +235,7 @@ int main(int const argc, char const* const argv[])
 
 
 	RakNet::RakPeerInterface::DestroyInstance(peer);
+	log.close();
 
 	//return 0;
 
