@@ -1,0 +1,18 @@
+This is a simple, commandline-based chat application.
+First, start the server and make sure it works. If the server starts sucsessfully, if will print out some information about itself 
+like the port and the maximum number of clients that can connect to it
+
+Before starting the client, make sure that the IP address that is in it matches that of the server (this will be made user-editable at a later stage)
+After that start your clients and they should automatically connect to the server.
+
+If you successfully connected to the server, you will be asked to enter your user name: follow the instructions on screen.
+Hit Enter and you should now be able to type a message!
+
+Messages you create have a few simple rules:
+1)  You will be asked to enter the name of the recipient(s) - 
+if you don't enter any names, the mesage will be broadcast to everyone connected even if you marked it as a private message
+if you enter a name (or multiple) and mark the message as private, only that person will see it
+if you enter a name (or multiple) and *don't* mark the message as private, it will be shown to everyone, but will have a note on top saying who it was addressed to
+2)  Designate wether the message is private or not - messages marked as private will only be shown to the users you indicated as the recipients
+
+When you are done, you can just close your client 
