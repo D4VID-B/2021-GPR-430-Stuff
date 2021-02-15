@@ -178,11 +178,13 @@
     <ClInclude Include="..\..\..\include\gpro-net\common\gpro-net-console.h" />
     <ClInclude Include="..\..\..\include\gpro-net\common\gpro-net-gamestate.h" />
     <ClInclude Include="..\..\..\include\gpro-net\gpro-net.h" />
+    <ClInclude Include="..\..\..\include\gpro-net\MancalaGame.h" />
     <ClInclude Include="..\..\..\include\gpro-net\Message.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\gpro-net\common\gpro-net-console_win.c" />
     <ClCompile Include="..\..\..\source\gpro-net\gpro-net.c" />
+    <ClCompile Include="..\..\..\source\gpro-net\MancalaGame.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

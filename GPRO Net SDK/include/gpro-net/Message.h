@@ -1,6 +1,7 @@
 /*
-	Created by David Bakaleinik
-	Edits by David Bakaleinik and Dyson Little
+	Created by David Bakaleinik with the Apache 2.0 licence
+
+	Written by Dyson Little and David Bakaleinik
 */
 
 #pragma once
