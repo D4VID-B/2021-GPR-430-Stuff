@@ -69,7 +69,6 @@ inline void gpro_mancala_reset(gpro_mancala gs)
 {
 	long long* itr = (long long*)gs;
 	itr[0] = itr[1] = 0x0004040404040400; // 6 cups, 4 stones each
-	gs[0][7] = gs[1][7] = 24; // on-side total
 }
 
 

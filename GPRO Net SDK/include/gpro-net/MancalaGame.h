@@ -20,8 +20,10 @@
 enum GameMessages
 {
 	ID_USER_INFO = ID_USER_PACKET_ENUM + 1,
-	ID_PLAYER_MOVE,									// used for sending normal messages
-	ID_GAME_OVER
+	ID_CONFIRM_MESSAGE_RECIEVED,
+	ID_REQUEST_PLAYER_MOVE,
+	ID_RETURN_PLAYER_MOVE,
+	ID_SEND_GAME_RESULTS
 };
 
 class MancalaGame
