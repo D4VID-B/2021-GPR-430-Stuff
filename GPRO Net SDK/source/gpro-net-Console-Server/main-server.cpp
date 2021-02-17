@@ -28,7 +28,7 @@
 */
 
 #include "gpro-net/gpro-net.h"
-#include "gpro-net/Message.h"
+#include "gpro-net/MancalaGame.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -231,6 +231,15 @@ int main(int const argc, char const* const argv[])
 
 			}
 				break;
+			case ID_RETURN_PLAYER_MOVE:
+			{
+				// We recieve the player move from the client
+				// Check if this was the correct player?
+				// Update the game state
+				// Determine if the game is over, and if not which player goes next
+				// Send that player an ID_REQUEST_PLAYER_MOVE message
+			}
+			break;
 			default:
 				printf("Message with identifier %i has arrived.\n", packet->data[0]);
 				break;
