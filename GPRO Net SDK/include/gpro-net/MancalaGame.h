@@ -44,7 +44,16 @@ public:
 	
 //			Constructor takes a board and makes a new one, resetting all the scores and stuff
 	
-	MancalaGame(gpro_mancala newBoard); 
+	MancalaGame(gpro_mancala newBoard)
+	{
+		player1Score = 0;
+		player2Score = 0;
+		currentStones = 0;
+		currentPlayer = 0;
+
+		//newBoard = new gpro_mancala[2][8];
+		gpro_mancala_reset(newBoard);
+	};
 
 
 //*********Getters & Setters::
@@ -52,21 +61,21 @@ public:
 	unsigned int getPlayer1Score() { return player1Score; };
 	unsigned int getPlayer2Score() { return player2Score; };
 
-	gpro_mancala* getGameBoard();
+	gpro_mancala* getGameBoard() { return &board; };
 
 	void setCurrentPlayer(int num) { if (num == 0) { currentPlayer = 0; } else { currentPlayer = 1; } };
 
 //*********Game logic::
 	
-	bool validateChoice()
+	bool validateChoice(unsigned int num)
 	{
 		bool valid = true; //Is the hole picked a valid one
-		unsigned int num;
+		
 
-		std::cout << "Please enter select the pocket.\n";
-		std::cout << "Only enter whole numbers between 1 and 6.\n";
-		std::cout << "Your Number: ";
-		std::cin >> num;
+		//std::cout << "Please enter select the pocket.\n";
+		//std::cout << "Only enter whole numbers between 1 and 6.\n";
+		//std::cout << "Your Number: ";
+		//std::cin >> num;
 			
 		if (num != 0 && num >= 1 && num <= 6)
 		{
@@ -86,7 +95,16 @@ public:
 		
 		//*********Perform turn:
 
-		//Remove all stones
+		if (validateChoice(holeNum)) //Check if the number the player gave us is in the specified range.
+		{
+
+		}
+		else
+		{
+			return;
+		}
+
+		//Remove all stones from that cup
 		currentStones = board[currentPlayer][holeNum];
 		board[currentPlayer][holeNum] = 0;
 
@@ -94,17 +112,9 @@ public:
 		unsigned int col = holeNum;
 		unsigned int row = currentPlayer;
 
-
 		while (currentStones >= 0)
 		{
-
-			if (col > 0)
-			{
-				col--;
-				board[row][col] ++;
-				currentStones--;
-			}
-			else if (col == 0) //Reached the score of the current player
+			if (col == 0) //Reached the score a player
 			{
 				if (row != currentPlayer && col == 0)
 				{
@@ -116,7 +126,6 @@ public:
 					currentStones--;
 				}
 				
-
 				//Change board rows
 				if (currentPlayer == 0)
 				{
@@ -130,22 +139,33 @@ public:
 				//Start from the last cup
 				col = gpro_mancala_cup6;
 			}
+			else if (col == 7)			
+			{
+				//This is the empty 8th slot that we aren't using atm, so we just skip it
+				col = gpro_mancala_cup6;
+			}
+			else if (col >= 1 || col <= 6)
+			{
+				col--;
+				board[row][col] ++;
+				currentStones--;
+			}
 		}
 
+		//Wrap up the turn
 		if (isGameOver())
 		{
+			calculatePlayerScore();
 			return;
 		}
 		else
 		{
-			determineTurn(col);
+			doesRepeatTurn(col);
 		}
 
-		
-		
 	}
 
-	bool determineTurn(unsigned int pos)
+	bool doesRepeatTurn(unsigned int pos)
 	{
 		bool sameTurn = false; //True if the last player got their last stone into their pit, false otherwise
 
@@ -171,13 +191,12 @@ public:
 			board[currentPlayer][gpro_mancala_cup6] == 0 )
 		{
 			status = true;
-			
 		}
 
 		return status;
 	}
 
-	int calculateOtherPlayerScore()
+	void calculatePlayerScore()
 	{
 
 		//Take all the stones of the other player and add them to their score, since the currentPlayer is the one who is done
@@ -205,7 +224,7 @@ public:
 		player2Score = board[1][gpro_mancala_score];
 
 
-		return 0;
+		//return 0;
 	}
 
 };

@@ -29,6 +29,7 @@
 
 #include "gpro-net/gpro-net.h"
 #include "gpro-net/Message.h"
+#include "gpro-net/MancalaGame.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,11 +57,15 @@ int main(int const argc, char const* const argv[])
 
 	peer->Connect(SERVER_IP, SERVER_PORT, 0, 0);
 	printf("Starting the client.\n");
-
 	//	**********	Initial Setup **********	//
 
+
+
+	//	**********	Coomon Variables **********	//
 	RakNet::RakString userName = "";
 	bool connected = false;
+	MancalaGame currentGame();
+	//	**********	Coomon Variables **********	//
 	
 	while (1)
 	{
@@ -95,13 +100,13 @@ int main(int const argc, char const* const argv[])
 				std::cin >> temp;
 
 				userName = RakNet::RakString(temp.c_str());
-				
 				//	**********	User Input Section **********	//
 
 
+				//currentGame = new MancalaGame(newBoard);
+
 
 				//	**********	Sending User Data **********	//
-
 				RakNet::BitStream bsOut;
 				RakNet::Time stamp = RakNet::GetTime();
 				//bsOut.Write((RakNet::MessageID)ID_TIMESTAMP);
@@ -109,7 +114,6 @@ int main(int const argc, char const* const argv[])
 				bsOut.Write((RakNet::MessageID)ID_USER_INFO);
 				bsOut.Write(userName);
 				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
-
 				//	**********	Sending User Data **********	//
 
 
@@ -139,24 +143,32 @@ int main(int const argc, char const* const argv[])
 
 			}
 			break;
-			case ID_GET_CHAT_MESSAGE:
+			case ID_REQUEST_PLAYER_MOVE:
 			{
-				//RakNet::RakString rs;
-				//RakNet::BitStream bsIn(packet->data, packet->length, false);
-				//bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				unsigned int num;
 
-				////bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				//Print out the state of the board for the player to see
+				std::cout << "Board state:: \n";
+				std::cout << "_____________________________________________________________________________________________________\n";
+				//std::cout << "| " + score + "|" + cup 1+ "|" + cup 2 + "|" + cup 3+ "|" + cup 4+ "|" + cup 5 + "|" + cup 6 + " |\n"; //Row 1
+				//std::cout << "| " + score + "|" + cup 1+ "|" + cup 2 + "|" + cup 3+ "|" + cup 4+ "|" + cup 5 + "|" + cup 6 + " |\n"; //Row 2
+				std::cout << "_____________________________________________________________________________________________________\n";
 
-				////bsIn.Read()
-				////bsIn.Read()
-				////bsIn.Read()
 
-				//bsIn.Read(rs);
-				//printf("%s\n", rs.C_String());
+
+
+				//Ask the player for their move
+				std::cout << "Please enter a number for the cup you would like to draw from.\n";
+				std::cout << "Enter only a single number between 1 and 6 please:::>> ";
+				std::cin >> num;
 				
 			}
 			break;
+			/*case :
+			{
 
+			}
+			break;*/
 			default:
 				printf("Message with identifier %i has arrived.\n", packet->data[0]);
 				break;
