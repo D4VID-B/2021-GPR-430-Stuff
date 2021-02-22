@@ -175,6 +175,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\gpro-net\common\CustomMessageIDs.h" />
     <ClInclude Include="..\..\..\include\gpro-net\common\gpro-net-console.h" />
     <ClInclude Include="..\..\..\include\gpro-net\common\gpro-net-gamestate.h" />
     <ClInclude Include="..\..\..\include\gpro-net\gpro-net.h" />

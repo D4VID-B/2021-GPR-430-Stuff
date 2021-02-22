@@ -17,16 +17,8 @@
 #include <stdio.h>
 #include <iostream>
 #include "common/gpro-net-gamestate.h"
+#include "gpro-net/common/CustomMessageIDs.h"
 
-
-enum GameMessages
-{
-	ID_USER_INFO = ID_USER_PACKET_ENUM + 1,
-	ID_CONFIRM_MESSAGE_RECIEVED,
-	ID_REQUEST_PLAYER_MOVE,
-	ID_RETURN_PLAYER_MOVE,
-	ID_SEND_GAME_RESULTS
-};
 
 class MancalaGame
 {
@@ -44,7 +36,7 @@ public:
 	
 //			Constructor takes a board and makes a new one, resetting all the scores and stuff
 	
-	MancalaGame(gpro_mancala newBoard)
+	MancalaGame()
 	{
 		player1Score = 0;
 		player2Score = 0;
@@ -52,7 +44,7 @@ public:
 		currentPlayer = 0;
 
 		//newBoard = new gpro_mancala[2][8];
-		gpro_mancala_reset(newBoard);
+		gpro_mancala_reset(board);
 	};
 
 
@@ -62,6 +54,8 @@ public:
 	unsigned int getPlayer2Score() { return player2Score; };
 
 	gpro_mancala* getGameBoard() { return &board; };
+
+	unsigned int getStonesAtPosition(unsigned int row, unsigned int pos) { return board[row][pos]; };
 
 	void setCurrentPlayer(int num) { if (num == 0) { currentPlayer = 0; } else { currentPlayer = 1; } };
 

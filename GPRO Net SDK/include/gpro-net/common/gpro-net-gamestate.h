@@ -36,17 +36,6 @@
 extern "C" {
 #endif	// __cplusplus
 
-
-	struct MancalaBoard
-	{
-	private:
-
-
-	public:
-
-
-	};
-
 typedef unsigned char
 	gpro_mancala[2][8];			// mancala board (shared)
 

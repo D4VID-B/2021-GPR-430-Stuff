@@ -36,6 +36,9 @@
     <ClInclude Include="..\..\..\include\gpro-net\MancalaGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\gpro-net\common\CustomMessageIDs.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\gpro-net\gpro-net.c">

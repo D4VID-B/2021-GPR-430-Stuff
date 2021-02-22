@@ -30,6 +30,8 @@
 #include "gpro-net/gpro-net.h"
 #include "gpro-net/Message.h"
 #include "gpro-net/MancalaGame.h"
+#include "gpro-net/common/CustomMessageIDs.h"
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,7 +47,7 @@
 
 int main(int const argc, char const* const argv[])
 {
-	//	**********	Initial Setup **********	//
+//	**********	Initial Setup Start **********	//
 	const char SERVER_IP[] = "172.16.2.60";
 	const unsigned short SERVER_PORT = 7777;
 
@@ -57,16 +59,25 @@ int main(int const argc, char const* const argv[])
 
 	peer->Connect(SERVER_IP, SERVER_PORT, 0, 0);
 	printf("Starting the client.\n");
-	//	**********	Initial Setup **********	//
+//	**********	Initial Setup End **********	//
 
 
 
-	//	**********	Coomon Variables **********	//
+//	**********	Coomon Variables Start **********	//
 	RakNet::RakString userName = "";
 	bool connected = false;
-	MancalaGame currentGame();
-	//	**********	Coomon Variables **********	//
+	gpro_mancala localBoard;
+
+	gpro_mancala_reset(localBoard);
+//	**********	Coomon Variables End **********	//
 	
+
+//	********* Testing Space Start*********	//
+
+	
+
+//	********* Testing Space End *********	//
+
 	while (1)
 	{
 		for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
@@ -91,22 +102,19 @@ int main(int const argc, char const* const argv[])
 			{
 				printf("Our connection request has been accepted.\n");
 
-				//	**********	User Input Section **********	//
+//	**********	User Input Section Start **********	//
 				//Just get the username and store it in a string
 				printf("\n Input User Name");
-				printf("\n No spaces!");
+				printf("\n No spaces please!");
 				printf("\n User Name ==> ");
 				std::string temp;
 				std::cin >> temp;
 
 				userName = RakNet::RakString(temp.c_str());
-				//	**********	User Input Section **********	//
+//	**********	User Input Section End **********	//
 
 
-				//currentGame = new MancalaGame(newBoard);
-
-
-				//	**********	Sending User Data **********	//
+//	**********	Sending User Data Start **********	//
 				RakNet::BitStream bsOut;
 				RakNet::Time stamp = RakNet::GetTime();
 				//bsOut.Write((RakNet::MessageID)ID_TIMESTAMP);
@@ -114,7 +122,7 @@ int main(int const argc, char const* const argv[])
 				bsOut.Write((RakNet::MessageID)ID_USER_INFO);
 				bsOut.Write(userName);
 				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
-				//	**********	Sending User Data **********	//
+//	**********	Sending User Data End**********	//
 
 
 				connected = true;
@@ -145,30 +153,48 @@ int main(int const argc, char const* const argv[])
 			break;
 			case ID_REQUEST_PLAYER_MOVE:
 			{
-				unsigned int num;
+				unsigned int num = 0;
 
+				RakNet::BitStream bsIn;
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(localBoard);
+				
 				//Print out the state of the board for the player to see
 				std::cout << "Board state:: \n";
-				std::cout << "_____________________________________________________________________________________________________\n";
-				//std::cout << "| " + score + "|" + cup 1+ "|" + cup 2 + "|" + cup 3+ "|" + cup 4+ "|" + cup 5 + "|" + cup 6 + " |\n"; //Row 1
-				//std::cout << "| " + score + "|" + cup 1+ "|" + cup 2 + "|" + cup 3+ "|" + cup 4+ "|" + cup 5 + "|" + cup 6 + " |\n"; //Row 2
-				std::cout << "_____________________________________________________________________________________________________\n";
-
-
+				std::cout << "_____________________________\n\n";
+				std::cout << "| " << localBoard[0][gpro_mancala_score] << " | " << localBoard[0][gpro_mancala_cup1] << " | " << localBoard[0][gpro_mancala_cup2] << " | " << localBoard[0][gpro_mancala_cup3] << " | " << localBoard[0][gpro_mancala_cup4] << " | " << localBoard[0][gpro_mancala_cup5] << " | " << localBoard[0][gpro_mancala_cup6] << " |\n"; //Row 1
+				std::cout << "-----------------------------\n";
+				std::cout << "| " << localBoard[1][gpro_mancala_score] << " | " << localBoard[1][gpro_mancala_cup1] << " | " << localBoard[1][gpro_mancala_cup2] << " | " << localBoard[1][gpro_mancala_cup3] << " | " << localBoard[1][gpro_mancala_cup4] << " | " << localBoard[1][gpro_mancala_cup5] << " | " << localBoard[1][gpro_mancala_cup6] << " |\n"; //Row 2
+				std::cout << "_____________________________\n\n";
 
 
 				//Ask the player for their move
 				std::cout << "Please enter a number for the cup you would like to draw from.\n";
 				std::cout << "Enter only a single number between 1 and 6 please:::>> ";
 				std::cin >> num;
+
+				//Input validation:
+				while (num == 0 || num == NULL || num < 1 || num > 6)
+				{
+					std::cout << "Enter only a single number between 1 and 6 please:::>> ";
+					std::cin >> num;
+				}
+
+				//Send back the player's responce
 				
 			}
 			break;
-			/*case :
+			case ID_RETURN_PLAYER_MOVE:
 			{
 
 			}
-			break;*/
+			break;
+			case ID_SEND_GAME_RESULTS:
+			{
+
+			}
+			break;
+
 			default:
 				printf("Message with identifier %i has arrived.\n", packet->data[0]);
 				break;

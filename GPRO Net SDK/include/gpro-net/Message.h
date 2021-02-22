@@ -14,13 +14,8 @@
 #include "RakNet/BitStream.h"
 #include <stdlib.h>
 #include <string>
+#include "gpro-net/common/CustomMessageIDs.h"
 
-enum GameMessages
-{
-	ID_USER_INFO = ID_USER_PACKET_ENUM + 1,
-	ID_SEND_CHAT_MESSAGE,									// used for sending normal messages
-	ID_GET_CHAT_MESSAGE
-};
 
 #pragma pack(push, 1)
 struct ChatMessage
