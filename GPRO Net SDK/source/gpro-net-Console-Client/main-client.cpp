@@ -174,24 +174,33 @@ int main(int const argc, char const* const argv[])
 				std::cin >> num;
 
 				//Input validation:
-				while (num == 0 || num == NULL || num < 1 || num > 6)
+				while (num == 0 || num < 1 || num > 6)
 				{
 					std::cout << "Enter only a single number between 1 and 6 please:::>> ";
 					std::cin >> num;
 				}
 
-				//Send back the player's responce
+				//Send back the player's responce using ID_RETURN_PLAYER_MOVE
+
 				
 			}
 			break;
 			case ID_RETURN_PLAYER_MOVE:
 			{
-
+				//Shouldn't actually get called, as it's a client->server only ID
 			}
 			break;
 			case ID_SEND_GAME_RESULTS:
 			{
+				//Recive bitstream w/ results
 
+				//Determine who won and print that out
+
+				//Print out the players' scores
+
+				//Ask them if they want to go again or they want to leave
+
+				//If they both want to go again, reset the game, otherwise kick both players to the lobby
 			}
 			break;
 
