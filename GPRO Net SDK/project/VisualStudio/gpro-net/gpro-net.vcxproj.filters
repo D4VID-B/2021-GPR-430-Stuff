@@ -36,6 +36,9 @@
     <ClInclude Include="..\..\..\include\gpro-net\MancalaGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\gpro-net\ServerLobby.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\gpro-net\gpro-net.c">
@@ -45,6 +48,9 @@
       <Filter>Source Files\common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\gpro-net\MancalaGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\gpro-net\ServerLobby.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
