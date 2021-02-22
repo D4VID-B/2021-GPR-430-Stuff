@@ -20,6 +20,32 @@
 #include "gpro-net/common/CustomMessageIDs.h"
 
 
+
+
+
+
+class RequestPlayerMoveMessage
+{
+private:
+	RakNet::Time timeStamp; // Put the system time in here returned by RakNet::GetTime() or some other method that returns a similar value
+	unsigned char board[2][8];
+
+public:
+	const void write(RakNet::BitStream& bs);
+	void read(RakNet::BitStream& bs);
+};
+
+class ReturnPlayerMoveMessage
+{
+private:
+	RakNet::Time timeStamp;
+	int move;
+
+public:
+	const void write(RakNet::BitStream& bs);
+	void read(RakNet::BitStream& bs);
+};
+
 class MancalaGame
 {
 protected:

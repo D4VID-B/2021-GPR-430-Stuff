@@ -50,5 +50,8 @@
     <ClCompile Include="..\..\..\source\gpro-net\MancalaGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\gpro-net\ServerLobby.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
