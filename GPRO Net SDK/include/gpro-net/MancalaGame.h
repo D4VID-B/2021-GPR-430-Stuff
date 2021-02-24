@@ -134,7 +134,7 @@ public:
 		unsigned int col = holeNum;
 		unsigned int row = currentPlayer;
 
-		while (currentStones >= 0)
+		while (currentStones > 0)
 		{
 			if (col == 0) //Reached the score a player
 			{
@@ -182,7 +182,17 @@ public:
 		}
 		else
 		{
-			doesRepeatTurn(col);
+			if (!doesRepeatTurn(col))
+			{
+				if (currentPlayer == 0)
+				{
+					currentPlayer = 1;
+				}
+				else
+				{
+					currentPlayer = 0;
+				}
+			}
 		}
 
 	}
