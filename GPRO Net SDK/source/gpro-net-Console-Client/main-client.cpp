@@ -67,9 +67,6 @@ int main(int const argc, char const* const argv[])
 	RakNet::RakString userName = "";
 	bool connected = false;
 
-	gpro_mancala localBoard;
-	gpro_mancala_reset(localBoard);
-
 	ReturnPlayerMoveMessage playerMove_ret = ReturnPlayerMoveMessage();
 	RequestPlayerMoveMessage playerMove_req = RequestPlayerMoveMessage();
 
@@ -162,17 +159,15 @@ int main(int const argc, char const* const argv[])
 				unsigned int num = 0;
 
 				RakNet::BitStream bsIn;
-				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-				bsIn.Read(localBoard);
 				
 				playerMove_req.read(bsIn);
-
+				
 				//Print out the state of the board for the player to see
 				std::cout << "Board state:: \n";
 				std::cout << "_____________________________\n\n";
-				std::cout << "| " << localBoard[0][gpro_mancala_score] << " | " << localBoard[0][gpro_mancala_cup1] << " | " << localBoard[0][gpro_mancala_cup2] << " | " << localBoard[0][gpro_mancala_cup3] << " | " << localBoard[0][gpro_mancala_cup4] << " | " << localBoard[0][gpro_mancala_cup5] << " | " << localBoard[0][gpro_mancala_cup6] << " |\n"; //Row 1
+				std::cout << "| " << playerMove_req.board[0][gpro_mancala_score] << " | " << playerMove_req.board[0][gpro_mancala_cup1] << " | " << playerMove_req.board[0][gpro_mancala_cup2] << " | " << playerMove_req.board[0][gpro_mancala_cup3] << " | " << playerMove_req.board[0][gpro_mancala_cup4] << " | " << playerMove_req.board[0][gpro_mancala_cup5] << " | " << playerMove_req.board[0][gpro_mancala_cup6] << " |\n"; //Row 1
 				std::cout << "-----------------------------\n";
-				std::cout << "| " << localBoard[1][gpro_mancala_score] << " | " << localBoard[1][gpro_mancala_cup1] << " | " << localBoard[1][gpro_mancala_cup2] << " | " << localBoard[1][gpro_mancala_cup3] << " | " << localBoard[1][gpro_mancala_cup4] << " | " << localBoard[1][gpro_mancala_cup5] << " | " << localBoard[1][gpro_mancala_cup6] << " |\n"; //Row 2
+				std::cout << "| " << playerMove_req.board[1][gpro_mancala_score] << " | " << playerMove_req.board[1][gpro_mancala_cup1] << " | " << playerMove_req.board[1][gpro_mancala_cup2] << " | " << playerMove_req.board[1][gpro_mancala_cup3] << " | " << playerMove_req.board[1][gpro_mancala_cup4] << " | " << playerMove_req.board[1][gpro_mancala_cup5] << " | " << playerMove_req.board[1][gpro_mancala_cup6] << " |\n"; //Row 2
 				std::cout << "_____________________________\n\n";
 
 
@@ -190,9 +185,10 @@ int main(int const argc, char const* const argv[])
 
 				//Send back the player's responce using ID_RETURN_PLAYER_MOVE
 				RakNet::BitStream bsOut;
-				bsOut.Write(num);
-
+				playerMove_ret.move = num;
 				playerMove_ret.write(bsOut);
+				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+
 				
 			}
 			break;
@@ -243,6 +239,9 @@ int main(int const argc, char const* const argv[])
 				RakNet::BitStream bsOut;
 				bsOut.Write((RakNet::MessageID)ID_REQUEST_GAME_STATUS);
 				bsOut.Write(status);
+
+				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+
 
 			}
 			break;
