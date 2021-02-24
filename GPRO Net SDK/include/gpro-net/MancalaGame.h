@@ -20,10 +20,6 @@
 #include "gpro-net/common/CustomMessageIDs.h"
 
 
-
-
-
-
 class RequestPlayerMoveMessage
 {
 private:

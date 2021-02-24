@@ -66,9 +66,15 @@ int main(int const argc, char const* const argv[])
 //	**********	Coomon Variables Start **********	//
 	RakNet::RakString userName = "";
 	bool connected = false;
-	gpro_mancala localBoard;
 
+	gpro_mancala localBoard;
 	gpro_mancala_reset(localBoard);
+
+	ReturnPlayerMoveMessage playerMove_ret = ReturnPlayerMoveMessage();
+	RequestPlayerMoveMessage playerMove_req = RequestPlayerMoveMessage();
+
+	int player1Score = 0;
+	int player2Score = 0;
 //	**********	Coomon Variables End **********	//
 	
 
@@ -159,6 +165,8 @@ int main(int const argc, char const* const argv[])
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(localBoard);
 				
+				playerMove_req.read(bsIn);
+
 				//Print out the state of the board for the player to see
 				std::cout << "Board state:: \n";
 				std::cout << "_____________________________\n\n";
@@ -181,7 +189,10 @@ int main(int const argc, char const* const argv[])
 				}
 
 				//Send back the player's responce using ID_RETURN_PLAYER_MOVE
+				RakNet::BitStream bsOut;
+				bsOut.Write(num);
 
+				playerMove_ret.write(bsOut);
 				
 			}
 			break;
@@ -193,14 +204,46 @@ int main(int const argc, char const* const argv[])
 			case ID_SEND_GAME_RESULTS:
 			{
 				//Recive bitstream w/ results
+				RakNet::BitStream bsIn;
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(player1Score);
+				bsIn.Read(player2Score);
 
 				//Determine who won and print that out
-
 				//Print out the players' scores
+				if (player1Score == player2Score)
+				{
+					std::cout << "\nIt's a Tie!\n";
+					std::cout << "Both players got: " << player1Score << " !\n";
+				}
+				else if (player1Score > player2Score)
+				{
+					std::cout << "\n Player 1 has won with a score of: " << player1Score << " !\n";
 
+				}
+				else
+				{
+					std::cout << "\n Player 2 has won with a score of: " << player2Score << " !\n";
+
+				}
+				
+				int status;
 				//Ask them if they want to go again or they want to leave
+				std::cout << "\n Would you like to play again? \n";
+				std::cout << "Enter 1 for YES, enter 2 for NO ::==>> ";
+				std::cin >> status;
+
+				while (status != 1 && status != 2)
+				{
+					std::cout << "Enter 1 for YES, enter 2 for NO ::==>> ";
+					std::cin >> status;
+				}
 
 				//If they both want to go again, reset the game, otherwise kick both players to the lobby
+				RakNet::BitStream bsOut;
+				bsOut.Write((RakNet::MessageID)ID_REQUEST_GAME_STATUS);
+				bsOut.Write(status);
+
 			}
 			break;
 
