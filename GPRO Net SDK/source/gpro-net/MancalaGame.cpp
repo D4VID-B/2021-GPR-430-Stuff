@@ -9,7 +9,8 @@
 const void RequestPlayerMoveMessage::write(RakNet::BitStream& bs)
 {
 	bs.Write((RakNet::MessageID)ID_REQUEST_PLAYER_MOVE);
-	bs.Write(RakNet::GetTime);
+	timeStamp = RakNet::GetTime();
+	bs.Write(timeStamp);
 	bs.Write(board);
 }
 
@@ -23,7 +24,8 @@ void RequestPlayerMoveMessage::read(RakNet::BitStream& bs)
 const void ReturnPlayerMoveMessage::write(RakNet::BitStream& bs)
 {
 	bs.Write((RakNet::MessageID)ID_RETURN_PLAYER_MOVE);
-	bs.Write(RakNet::GetTime);
+	timeStamp = RakNet::GetTime();
+	bs.Write(timeStamp);
 	bs.Write(move);
 }
 
