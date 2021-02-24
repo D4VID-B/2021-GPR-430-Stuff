@@ -28,6 +28,9 @@ private:
 public:
 	unsigned char board[2][8];
 
+	void setBoard(gpro_mancala theBoard);
+	void getBoard(gpro_mancala &theBoard);
+
 	const void write(RakNet::BitStream& bs);
 	void read(RakNet::BitStream& bs);
 };
@@ -54,12 +57,13 @@ protected:
 	//0 if it's player 1; 1 if it's player 2 -> to determine which row of the array we start in
 	unsigned int currentPlayer;
 
-	gpro_mancala board;
 
 public:
-	
-//			Constructor takes a board and makes a new one, resetting all the scores and stuff
-	
+	//Had to be done this way to make accessible
+	gpro_mancala board;
+
+
+	//Constructor takes a board and makes a new one, resetting all the scores and stuff
 	MancalaGame()
 	{
 		player1Score = 0;

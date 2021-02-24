@@ -61,6 +61,14 @@ int main(int const argc, char const* const argv[])
 	std::ofstream log;
 	//log.open("Chat_Log.txt");
 
+//****		Manacala Stuff		**//
+	//Used to figure out if one or both player want to end the game
+	int endgameTotal = 0;
+
+	MancalaGame gameInstance = MancalaGame();
+	
+//****		Manacala Stuff		**//
+
 	log << "Server Online ...\n";
 
 	while (1)
@@ -238,6 +246,37 @@ int main(int const argc, char const* const argv[])
 				// Update the game state
 				// Determine if the game is over, and if not which player goes next
 				// Send that player an ID_REQUEST_PLAYER_MOVE message
+			}
+			break;
+			case ID_REQUEST_GAME_STATUS:
+			{
+				int gameStatus;
+
+				RakNet::BitStream bsIn;
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(gameStatus);
+
+				endgameTotal += gameStatus;
+
+				if (endgameTotal >= 3) //If it's 3, then one player wants to leave and the other wants to stay. If it's 4 then both want to leave.
+				{
+					//Close the game and the lobby/server
+
+				}
+				else
+				{
+					//Reset the game and start again
+					RequestPlayerMoveMessage message = RequestPlayerMoveMessage();
+					gameInstance = MancalaGame();
+
+					RakNet::BitStream bsOut;
+					message.setBoard(gameInstance.board);
+					message.write(bsOut);
+
+					peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
+				}
+
 			}
 			break;
 			default:
