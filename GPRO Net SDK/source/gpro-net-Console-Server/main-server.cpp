@@ -29,7 +29,7 @@
 
 #include "gpro-net/gpro-net.h"
 #include "gpro-net/MancalaGame.h"
-
+#include "gpro-net/Message.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -97,10 +97,26 @@ int main(int const argc, char const* const argv[])
 			{
 				printf("Welcome to the server\n");
 
+				//Assign the players based on who joined first
+				if (player0Address == NULL)
+				{
+					player0Address = packet->systemAddress;
+
+					std::cout << "You are Player 1! \n";
+
+				}
+				else if (player0Address != NULL)
+				{
+					player1Address = packet->systemAddress;
+					std::cout << "You are Player 2! \n";
+
+				}
+
 			}
 			break;
 			case ID_NEW_INCOMING_CONNECTION:
 				printf("A connection is incoming.\n");
+
 				break;
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
 				printf("The server is full.\n");
@@ -312,7 +328,7 @@ int main(int const argc, char const* const argv[])
 					gameInstance = MancalaGame();
 
 					RakNet::BitStream bsOut;
-					message.setBoard(gameInstance.board);
+					message.setBoard(gameInstance.getGameBoard());
 					message.write(bsOut);
 
 					peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
