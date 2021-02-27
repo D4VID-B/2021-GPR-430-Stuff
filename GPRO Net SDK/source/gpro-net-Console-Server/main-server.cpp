@@ -277,14 +277,15 @@ int main(int const argc, char const* const argv[])
 						RequestPlayerMoveMessage reqPlayerMoveMessage;
 						RakNet::BitStream bsOut;
 						reqPlayerMoveMessage.setBoard(gameInstance.getGameBoard());
+						reqPlayerMoveMessage.write(bsOut);
 
 						if (gameInstance.getCurrentPlayer() == 0)
 						{
-							
+							peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, player0Address, false);
 						}
 						else if (gameInstance.getCurrentPlayer() == 1)
 						{
-
+							peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, player1Address, false);
 						}
 					}
 				}
@@ -312,7 +313,7 @@ int main(int const argc, char const* const argv[])
 					gameInstance = MancalaGame();
 
 					RakNet::BitStream bsOut;
-					message.setBoard(gameInstance.board);
+					message.setBoard(gameInstance.getGameBoard());
 					message.write(bsOut);
 
 					peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
