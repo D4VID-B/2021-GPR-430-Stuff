@@ -21,13 +21,13 @@ void RequestPlayerMoveMessage::read(RakNet::BitStream& bs)
 	bs.Read(board);
 }
 
-void RequestPlayerMoveMessage::setBoard(gpro_mancala theBoard)
+void RequestPlayerMoveMessage::setBoard(gpro_mancala* theBoard)
 {
 	for (int i = 0; i < 2; i++)
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			board[i][j] = theBoard[i][j];
+			board[i][j] = *theBoard[i][j];
 		}
 	}
 }

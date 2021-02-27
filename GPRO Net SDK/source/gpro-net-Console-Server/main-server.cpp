@@ -57,6 +57,8 @@ int main(int const argc, char const* const argv[])
 
 	std::map<std::string, std::string> users;
 
+	RakNet::SystemAddress player0Address, player1Address;
+
 	//const char* path = "/Desktop/Chat_Log.txt";
 	std::ofstream log;
 	//log.open("Chat_Log.txt");
@@ -246,6 +248,46 @@ int main(int const argc, char const* const argv[])
 				// Update the game state
 				// Determine if the game is over, and if not which player goes next
 				// Send that player an ID_REQUEST_PLAYER_MOVE message
+
+				// Check if the correct player is sending us the packet
+
+				if ((packet->systemAddress != player0Address && gameInstance.getCurrentPlayer() == 0) ||
+					(packet->systemAddress != player1Address && gameInstance.getCurrentPlayer() == 1))
+				{
+					// got a message from the wrong player
+				}
+				else
+				{
+
+					ReturnPlayerMoveMessage retPlayerMoveMessage;
+
+					RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+					retPlayerMoveMessage.read(bsIn);
+
+					gameInstance.doTurn(retPlayerMoveMessage.move);
+
+					if (gameInstance.isGameOver())
+					{
+						// send players game over info
+						printf("Game Over!");
+					}
+					else
+					{
+						RequestPlayerMoveMessage reqPlayerMoveMessage;
+						RakNet::BitStream bsOut;
+						reqPlayerMoveMessage.setBoard(gameInstance.getGameBoard());
+
+						if (gameInstance.getCurrentPlayer() == 0)
+						{
+							
+						}
+						else if (gameInstance.getCurrentPlayer() == 1)
+						{
+
+						}
+					}
+				}
 			}
 			break;
 			case ID_REQUEST_GAME_STATUS:

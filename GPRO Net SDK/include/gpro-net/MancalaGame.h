@@ -28,7 +28,7 @@ private:
 public:
 	unsigned char board[2][8];
 
-	void setBoard(gpro_mancala theBoard);
+	void setBoard(gpro_mancala* theBoard);
 	void getBoard(gpro_mancala &theBoard);
 
 	const void write(RakNet::BitStream& bs);
@@ -86,6 +86,7 @@ public:
 	unsigned int getStonesAtPosition(unsigned int row, unsigned int pos) { return board[row][pos]; };
 
 	void setCurrentPlayer(int num) { if (num == 0) { currentPlayer = 0; } else { currentPlayer = 1; } };
+	unsigned int getCurrentPlayer() { return currentPlayer; }
 
 //*********Game logic::
 	
@@ -134,7 +135,7 @@ public:
 		unsigned int col = holeNum;
 		unsigned int row = currentPlayer;
 
-		while (currentStones >= 0)
+		while (currentStones > 0)
 		{
 			if (col == 0) //Reached the score a player
 			{
