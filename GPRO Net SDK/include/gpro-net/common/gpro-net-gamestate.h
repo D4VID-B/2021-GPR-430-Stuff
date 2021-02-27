@@ -36,7 +36,7 @@
 extern "C" {
 #endif	// __cplusplus
 
-typedef unsigned char
+typedef unsigned int
 	gpro_mancala[2][8];			// mancala board (shared)
 
 /*
@@ -69,6 +69,27 @@ inline void gpro_mancala_reset(gpro_mancala gs)
 	long long* itr = (long long*)gs;
 	itr[0] = itr[1] = 0x0004040404040400; // 6 cups, 4 stones each
 	gs[0][7] = gs[1][7] = 24; // on-side total
+}
+
+inline void resetBoard(gpro_mancala& theBoard)
+{
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			if (j == 0 || j == 7)
+			{
+				theBoard[i][j] = 0;
+			}
+			else
+			{
+				theBoard[i][j] = 4;
+			}
+
+			//std::cout << " " << theBoard[i][j] << " ";
+		}
+		//std::cout << "\n";
+	}
 }
 
 

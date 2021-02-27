@@ -57,7 +57,7 @@ int main(int const argc, char const* const argv[])
 
 	std::map<std::string, std::string> users;
 
-	RakNet::SystemAddress player0Address, player1Address;
+	
 
 	//const char* path = "/Desktop/Chat_Log.txt";
 	std::ofstream log;
@@ -68,6 +68,12 @@ int main(int const argc, char const* const argv[])
 	int endgameTotal = 0;
 
 	MancalaGame gameInstance = MancalaGame();
+
+	RakNet::SystemAddress player0Address = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
+	RakNet::SystemAddress player1Address = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
+
+	//player0Address.FromString(0);
+	//player1Address.FromString(0);
 	
 //****		Manacala Stuff		**//
 
@@ -97,25 +103,39 @@ int main(int const argc, char const* const argv[])
 			{
 				printf("Welcome to the server\n");
 
-				//Assign the players based on who joined first
-				if (player0Address == NULL)
-				{
-					player0Address = packet->systemAddress;
-
-					std::cout << "You are Player 1! \n";
-
-				}
-				else if (player0Address != NULL)
-				{
-					player1Address = packet->systemAddress;
-					std::cout << "You are Player 2! \n";
-
-				}
-
 			}
 			break;
 			case ID_NEW_INCOMING_CONNECTION:
 				printf("A connection is incoming.\n");
+
+				//Assign the players based on who joined first
+				if (player0Address == RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+				{
+					player0Address = packet->systemAddress;
+
+					std::cout << "Player 1 has joined! \n";
+
+				}
+				else if (player0Address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+				{
+					player1Address = packet->systemAddress;
+					std::cout << "Player 2 has joined! \n";
+					std::cout << "Starting game... \n";
+
+					RequestPlayerMoveMessage firstMove;
+					RakNet::BitStream bsOut;
+
+					std::cout << "\n" << gameInstance.board[0][3] << "\n";
+
+					firstMove.setBoard(gameInstance.board);
+					
+					std::cout << "\n" << firstMove.board[0][3] << "\n";
+
+					firstMove.write(bsOut);
+
+					peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, player0Address, false);
+
+				}
 
 				break;
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
@@ -281,6 +301,8 @@ int main(int const argc, char const* const argv[])
 
 					retPlayerMoveMessage.read(bsIn);
 
+					std::cout << "Player chose: " << retPlayerMoveMessage.move << "\n";
+
 					gameInstance.doTurn(retPlayerMoveMessage.move);
 
 					if (gameInstance.isGameOver())
@@ -292,7 +314,7 @@ int main(int const argc, char const* const argv[])
 					{
 						RequestPlayerMoveMessage reqPlayerMoveMessage;
 						RakNet::BitStream bsOut;
-						reqPlayerMoveMessage.setBoard(gameInstance.getGameBoard());
+						reqPlayerMoveMessage.setBoard(gameInstance.board);
 						reqPlayerMoveMessage.write(bsOut);
 
 						if (gameInstance.getCurrentPlayer() == 0)
@@ -329,7 +351,7 @@ int main(int const argc, char const* const argv[])
 					gameInstance = MancalaGame();
 
 					RakNet::BitStream bsOut;
-					message.setBoard(gameInstance.getGameBoard());
+					message.setBoard(gameInstance.board);
 					message.write(bsOut);
 
 					peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);

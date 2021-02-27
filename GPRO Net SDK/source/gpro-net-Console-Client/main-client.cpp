@@ -48,7 +48,7 @@
 int main(int const argc, char const* const argv[])
 {
 //	**********	Initial Setup Start **********	//
-	const char SERVER_IP[] = "172.16.2.60";
+	const char SERVER_IP[] = "172.16.2.51";
 	const unsigned short SERVER_PORT = 7777;
 
 	RakNet::RakPeerInterface* peer = RakNet::RakPeerInterface::GetInstance();
@@ -107,24 +107,24 @@ int main(int const argc, char const* const argv[])
 
 //	**********	User Input Section Start **********	//
 				//Just get the username and store it in a string
-				printf("\n Input User Name");
+				/*printf("\n Input User Name");
 				printf("\n No spaces please!");
 				printf("\n User Name ==> ");
 				std::string temp;
 				std::cin >> temp;
 
-				userName = RakNet::RakString(temp.c_str());
+				userName = RakNet::RakString(temp.c_str());*/
 //	**********	User Input Section End **********	//
 
 
 //	**********	Sending User Data Start **********	//
-				RakNet::BitStream bsOut;
-				RakNet::Time stamp = RakNet::GetTime();
-				//bsOut.Write((RakNet::MessageID)ID_TIMESTAMP);
-				//bsOut.Write(stamp);
-				bsOut.Write((RakNet::MessageID)ID_USER_INFO);
-				bsOut.Write(userName);
-				peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
+				//RakNet::BitStream bsOut;
+				//RakNet::Time stamp = RakNet::GetTime();
+				////bsOut.Write((RakNet::MessageID)ID_TIMESTAMP);
+				////bsOut.Write(stamp);
+				//bsOut.Write((RakNet::MessageID)ID_USER_INFO);
+				//bsOut.Write(userName);
+				//peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 //	**********	Sending User Data End**********	//
 
 
@@ -159,7 +159,7 @@ int main(int const argc, char const* const argv[])
 				unsigned int num = 0;
 
 				RakNet::BitStream bsIn;
-				
+				//bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				playerMove_req.read(bsIn);
 				
 				//Print out the state of the board for the player to see
@@ -251,36 +251,36 @@ int main(int const argc, char const* const argv[])
 				break;
 			}
 		}
-		if (connected)
-		{
-			// Scan and send outbound messages
-			printf("> Give recipient? (input _ if you don't want to): ");
-			char rec[101];
-			scanf("%100s", &rec);
+		//if (connected)
+		//{
+		//	// Scan and send outbound messages
+		//	printf("> Give recipient? (input _ if you don't want to): ");
+		//	char rec[101];
+		//	scanf("%100s", &rec);
 
-			printf("> Private? 0 for no, 1 for yes: ");
-			unsigned int isPr = 0;
-			bool isPrivate;
-			scanf("%u", &isPr);
-			if (isPr == 1)
-			{
-				isPrivate = true;
-			}
-			else
-			{
-				isPrivate = false;
-			}
+		//	printf("> Private? 0 for no, 1 for yes: ");
+		//	unsigned int isPr = 0;
+		//	bool isPrivate;
+		//	scanf("%u", &isPr);
+		//	if (isPr == 1)
+		//	{
+		//		isPrivate = true;
+		//	}
+		//	else
+		//	{
+		//		isPrivate = false;
+		//	}
 
-			printf("> ");
-			char input[101];
-			std::cin.ignore();
-			std::cin.getline(input, sizeof input);
-			ChatMessage outboundMessage = ChatMessage(userName.C_String(), rec, isPr, input);
-			RakNet::BitStream bsOut;
-			bsOut.Write((RakNet::MessageID)ID_SEND_CHAT_MESSAGE);
-			bsOut.Write(outboundMessage);
-			peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-		}
+		//	printf("> ");
+		//	char input[101];
+		//	std::cin.ignore();
+		//	std::cin.getline(input, sizeof input);
+		//	ChatMessage outboundMessage = ChatMessage(userName.C_String(), rec, isPr, input);
+		//	RakNet::BitStream bsOut;
+		//	bsOut.Write((RakNet::MessageID)ID_SEND_CHAT_MESSAGE);
+		//	bsOut.Write(outboundMessage);
+		//	peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+		//}
 	}
 
 

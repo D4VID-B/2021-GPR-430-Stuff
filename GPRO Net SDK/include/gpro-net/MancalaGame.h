@@ -26,9 +26,9 @@ private:
 	RakNet::Time timeStamp; // Put the system time in here returned by RakNet::GetTime() or some other method that returns a similar value
 
 public:
-	unsigned char board[2][8];
+	gpro_mancala board[2][8];
 
-	void setBoard(gpro_mancala* theBoard);
+	void setBoard(gpro_mancala theBoard);
 	void getBoard(gpro_mancala &theBoard);
 
 	const void write(RakNet::BitStream& bs);
@@ -57,7 +57,6 @@ protected:
 	//0 if it's player 1; 1 if it's player 2 -> to determine which row of the array we start in
 	unsigned int currentPlayer;
 
-
 public:
 	//Had to be done this way to make accessible
 	gpro_mancala board;
@@ -71,8 +70,8 @@ public:
 		currentStones = 0;
 		currentPlayer = 0;
 
-		//newBoard = new gpro_mancala[2][8];
-		gpro_mancala_reset(board);
+		//gpro_mancala_reset(board);
+		resetBoard(board);
 	};
 
 
