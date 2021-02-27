@@ -183,7 +183,17 @@ public:
 		}
 		else
 		{
-			doesRepeatTurn(col);
+			if (!doesRepeatTurn(col))
+			{
+				if (currentPlayer == 0)
+				{
+					currentPlayer = 1;
+				}
+				else
+				{
+					currentPlayer = 0;
+				}
+			}
 		}
 
 	}
