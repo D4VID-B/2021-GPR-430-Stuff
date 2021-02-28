@@ -21,7 +21,7 @@ void RequestPlayerMoveMessage::read(RakNet::BitStream& bs)
 	bs.Read(board);
 }
 
-void RequestPlayerMoveMessage::setBoard(gpro_mancala theBoard)
+void RequestPlayerMoveMessage::setBoard(gpro_mancala &theBoard)
 {
 	for (int i = 0; i < 2; i++)
 	{
@@ -59,4 +59,13 @@ void ReturnPlayerMoveMessage::read(RakNet::BitStream& bs)
 	bs.IgnoreBytes(sizeof(RakNet::MessageID));
 	bs.Read(timeStamp);
 	bs.Read(move);
+}
+
+const void GameOverMessage::write(RakNet::BitStream& bs)
+{
+	return void();
+}
+
+void GameOverMessage::read(RakNet::BitStream& bs)
+{
 }

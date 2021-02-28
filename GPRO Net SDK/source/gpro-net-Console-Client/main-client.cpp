@@ -158,7 +158,7 @@ int main(int const argc, char const* const argv[])
 			{
 				unsigned int num = 0;
 
-				RakNet::BitStream bsIn;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				//bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				playerMove_req.read(bsIn);
 				

@@ -26,9 +26,9 @@ private:
 	RakNet::Time timeStamp; // Put the system time in here returned by RakNet::GetTime() or some other method that returns a similar value
 
 public:
-	gpro_mancala board[2][8];
+	gpro_mancala board;
 
-	void setBoard(gpro_mancala theBoard);
+	void setBoard(gpro_mancala &theBoard);
 	void getBoard(gpro_mancala &theBoard);
 
 	const void write(RakNet::BitStream& bs);
@@ -42,6 +42,19 @@ private:
 
 public:
 	int move;
+
+	const void write(RakNet::BitStream& bs);
+	void read(RakNet::BitStream& bs);
+};
+
+class GameOverMessage
+{
+private:
+	RakNet::Time timeStamp;
+
+public:
+	gpro_mancala board;
+	int player0Score, player1Score;
 
 	const void write(RakNet::BitStream& bs);
 	void read(RakNet::BitStream& bs);
@@ -131,7 +144,7 @@ public:
 		board[currentPlayer][holeNum] = 0;
 
 		//Go through the board and drop the stones into it
-		unsigned int col = holeNum;
+		unsigned int col = holeNum - 1;
 		unsigned int row = currentPlayer;
 
 		while (currentStones > 0)
@@ -168,8 +181,8 @@ public:
 			}
 			else if (col >= 1 || col <= 6)
 			{
-				col--;
 				board[row][col] ++;
+				col--;
 				currentStones--;
 			}
 		}
