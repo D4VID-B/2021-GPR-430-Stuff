@@ -26,7 +26,7 @@ private:
 	RakNet::Time timeStamp; // Put the system time in here returned by RakNet::GetTime() or some other method that returns a similar value
 
 public:
-	gpro_mancala board[2][8];
+	gpro_mancala board;
 
 	void setBoard(gpro_mancala theBoard);
 	void getBoard(gpro_mancala &theBoard);
@@ -131,14 +131,14 @@ public:
 		board[currentPlayer][holeNum] = 0;
 
 		//Go through the board and drop the stones into it
-		unsigned int col = holeNum;
+		unsigned int col = holeNum - 1;
 		unsigned int row = currentPlayer;
 
 		while (currentStones > 0)
 		{
 			if (col == 0) //Reached the score a player
 			{
-				if (row != currentPlayer && col == 0)
+				if (row != currentPlayer)
 				{
 					//We got to the scoring pit of the other player, so we skip it
 				}
@@ -168,8 +168,9 @@ public:
 			}
 			else if (col >= 1 || col <= 6)
 			{
-				col--;
+				
 				board[row][col] ++;
+				col--;
 				currentStones--;
 			}
 		}

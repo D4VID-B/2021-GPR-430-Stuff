@@ -12,13 +12,33 @@ const void RequestPlayerMoveMessage::write(RakNet::BitStream& bs)
 	timeStamp = RakNet::GetTime();
 	bs.Write(timeStamp);
 	bs.Write(board);
+
+	/*for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			bs.Write(board[i][j]);
+		}
+	}*/
+	//bs.Write(board[0][2]);
 }
 
 void RequestPlayerMoveMessage::read(RakNet::BitStream& bs)
 {
+	//unsigned int i;
 	bs.IgnoreBytes(sizeof(RakNet::MessageID));
+
 	bs.Read(timeStamp);
 	bs.Read(board);
+
+	/*for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			bs.Read(board[i][j]);
+		}
+	}*/
+	//bs.Read(i);
 }
 
 void RequestPlayerMoveMessage::setBoard(gpro_mancala theBoard)

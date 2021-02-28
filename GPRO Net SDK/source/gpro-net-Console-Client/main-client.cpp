@@ -157,11 +157,14 @@ int main(int const argc, char const* const argv[])
 			case ID_REQUEST_PLAYER_MOVE:
 			{
 				unsigned int num = 0;
-
-				RakNet::BitStream bsIn;
+				//gpro_mancala updBoard;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				//bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				//bsIn.Read(updBoard);
 				playerMove_req.read(bsIn);
 				
+				
+
 				//Print out the state of the board for the player to see
 				std::cout << "Board state:: \n";
 				std::cout << "_____________________________\n\n";
