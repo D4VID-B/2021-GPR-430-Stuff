@@ -157,7 +157,7 @@ int main(int const argc, char const* const argv[])
 			case ID_REQUEST_PLAYER_MOVE:
 			{
 				unsigned int num = 0;
-				//gpro_mancala updBoard;
+
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				//bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				//bsIn.Read(updBoard);

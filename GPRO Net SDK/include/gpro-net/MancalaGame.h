@@ -28,7 +28,7 @@ private:
 public:
 	gpro_mancala board;
 
-	void setBoard(gpro_mancala theBoard);
+	void setBoard(gpro_mancala &theBoard);
 	void getBoard(gpro_mancala &theBoard);
 
 	const void write(RakNet::BitStream& bs);
@@ -42,6 +42,19 @@ private:
 
 public:
 	int move;
+
+	const void write(RakNet::BitStream& bs);
+	void read(RakNet::BitStream& bs);
+};
+
+class GameOverMessage
+{
+private:
+	RakNet::Time timeStamp;
+
+public:
+	gpro_mancala board;
+	int player0Score, player1Score;
 
 	const void write(RakNet::BitStream& bs);
 	void read(RakNet::BitStream& bs);

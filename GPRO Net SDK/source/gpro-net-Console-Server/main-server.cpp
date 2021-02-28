@@ -309,6 +309,8 @@ int main(int const argc, char const* const argv[])
 					{
 						// send players game over info
 						printf("Game Over!");
+
+
 					}
 					else
 					{
