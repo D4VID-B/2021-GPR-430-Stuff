@@ -1,0 +1,12 @@
+For our game we picked Mancala.
+We decided to not include the rule about capturing the opponent's stones, as we felt we had enough to do as it is.
+
+The game is run by the server which sends move requests to the players along with the board and takes in the integer corresponding to the cup the player wants.
+The server performs all of the turn logic, including deciding whether or not the player gets a second (third, etc...) turn and whether the game is over and then sends that to the player.
+
+The game will start as soon as 2 players connect to the server, since we didn't have time to implement a proper lobby system. Player 1 is the first client to connect and will get the board first.
+All the player needs to do is enter an integer between 1 and 6 (there is some input checking, though it's not perfect) and hit enter 
+and the second player will get the board as of the end of the first player's turn.
+
+When the game ends the players are asked whether they want to play again and both have to say yes (by entering "2") at which point the game will reset.
+If one or both players say no then the game ends.
