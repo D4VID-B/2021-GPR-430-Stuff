@@ -28,6 +28,9 @@
 
 
 #include "gpro-net/gpro-net/gpro-net-RakNet.hpp"
+#include <map>
+#include <string>
+
 
 
 namespace gproNet
@@ -67,6 +70,50 @@ namespace gproNet
 		//		param msgID: message identifier
 		//		return: was message processed
 		virtual bool ProcessMessage(RakNet::BitStream& bitstream, RakNet::SystemAddress const sender, RakNet::Time const dtSendToReceive, RakNet::MessageID const msgID);
+
+		
+		 std::map<std::string, GameServer> ServerMap;
+		 std::map<std::string, GameServer> AvailableServerMap;
+		
+
+		 std::map<std::string, RakNet::SystemAddress> userMap;
+
+		
+		 void ManageServer(GameServer server)
+		 {
+			 //The server is full
+			if(server.getCurrentPlayerNumber() == server.GetMaxPlayers())
+			{
+				//Check the active map for this server
+				if (/*It's in the map*/)
+				{
+					AvailableServerMap.erase(server.getID());
+				}
+				else
+				{
+					//Leave it alone
+				}
+			}
+			else 
+			{
+				//Add it to the active server map
+				AvailableServerMap.emplace(server.getID(), server);
+			}
+		 
+		 }
+
+		 void ManageClient(std::string userName)
+		 {
+			 //Check if the user is in the map
+
+				//If they are:
+
+
+				//If they are not, then they are new
+
+		 }
+		
+
 	};
 
 }
